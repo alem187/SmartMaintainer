@@ -24,7 +24,8 @@ SmartMaintain ist eine Web-App für Hausverwaltungen, die den Prozess von Schade
 - Status direkt im Ticket ändern (Neu → In Bearbeitung → Erledigt)
 - Echtzeit-Updates ohne Seitenreload
 
-### KI-Analyse (Google Gemini)
+### KI-Analyse (Google Gemini API)
+- **Verwendete API:** Google AI Studio (`generativelanguage.googleapis.com`)
 - Automatische Kategorisierung: Sanitär, Elektro, Heizung, Schädlinge, Fenster/Türen, Dach/Fassade, Aufzug, Allgemein, Sonstiges
 - Dringlichkeitsbewertung: Hoch, Mittel, Niedrig
 - Kurzzusammenfassung in max. 6 Wörtern
