@@ -167,8 +167,8 @@ export const analyzeTicket = internalAction({
         });
         return; // Erfolgreich: Schleife beenden
 
-      } catch (e: any) {
-        const isRateLimit = e?.status === 429;
+      } catch (e: unknown) {
+        const isRateLimit = typeof e === "object" && e !== null && "status" in e && e.status === 429;
 
         // Rate Limit: Warten und erneut versuchen
         if (isRateLimit && attempt < maxRetries) {

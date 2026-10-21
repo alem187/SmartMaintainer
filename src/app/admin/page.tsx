@@ -12,11 +12,11 @@
  * - Logout-Funktion
  *
  * Datenfluss:
- * Convex DB → useQuery(api.tickets.list) → DashboardContent → TicketCard
+ * Convex DB → useQuery(api.tickets.list, authChecked ? {} : "skip") → DashboardContent → TicketCard
  */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "@convex/_generated/api";
@@ -25,9 +25,10 @@ import {
   AlertTriangle, BarChart3, TrendingUp, LogOut, X,
 } from "lucide-react";
 import Link from "next/link";
+import { useDemoAccess } from "@/hooks/useDemoAccess";
 import { Spinner } from "@/components/ui/Spinner";
 import { TicketCard } from "@/components/TicketCard";
-import { isAuthenticated, getRole, hasAdminAccess, logout, ROLE_LABELS, type UserRole } from "@/lib/auth";
+import { getRole, logout, ROLE_LABELS, type UserRole } from "@/lib/auth";
 import type { Ticket, TicketStatus } from "@/lib/types";
 
 /**
@@ -68,24 +69,13 @@ function useTicketStats(tickets: Ticket[]) {
  * 4. DashboardContent rendern sobald alles bereit ist
  */
 export default function AdminDashboard() {
-  const router = useRouter();
 
   /** Verhindert Flackern: Dashboard wird erst gerendert nach Auth-Check */
-  const [authChecked, setAuthChecked] = useState(false);
-
-  // Auth-Guard: beim ersten Rendern prüfen ob Session vorhanden
-  useEffect(() => {
-    // Nur Benutzer mit Admin-Rechten ("admin" oder "it") dürfen diese Seite sehen
-    if (!isAuthenticated() || !hasAdminAccess()) {
-      router.replace("/admin/login");
-    } else {
-      setAuthChecked(true);
-    }
-  }, [router]);
+  const authChecked = useDemoAccess("admin");
 
   // Echtzeit-Abonnement aller Tickets via Convex
   // undefined = noch ladend, [] = keine Tickets, [...] = Daten vorhanden
-  const tickets = useQuery(api.tickets.list) as Ticket[] | undefined;
+  const tickets = useQuery(api.tickets.list, authChecked ? {} : "skip") as Ticket[] | undefined;
 
   // Noch nicht authentifiziert: nichts rendern (Weiterleitung läuft)
   if (!authChecked) return null;
