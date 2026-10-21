@@ -51,12 +51,14 @@ export function AnalyticsReport({
   backHref,
   roleLabel,
   demo = false,
+  embedded = false,
   referenceTime,
 }: {
   tickets: readonly ReportTicket[];
   backHref: string;
   roleLabel: string;
   demo?: boolean;
+  embedded?: boolean;
   referenceTime?: number;
 }) {
   const [period, setPeriod] = useState<ReportPeriod>("30");
@@ -102,7 +104,7 @@ export function AnalyticsReport({
   };
   return (
     <div className="min-h-screen bg-[#f5f7fb] text-slate-900">
-      {demo && (
+      {demo && !embedded && (
         <div className="bg-slate-950 px-4 py-2.5 text-center text-xs leading-relaxed text-slate-300">
           <span className="font-semibold text-white">
             Interaktive Produktdemo
@@ -111,38 +113,40 @@ export function AnalyticsReport({
           <span className="hidden sm:inline">· Stand 21. Oktober 2026</span>
         </div>
       )}
-      <header className="border-b border-slate-200/80 bg-white px-4 sm:px-8">
-        <div className="mx-auto flex min-h-20 max-w-7xl flex-wrap items-center justify-between gap-3 py-4">
-          <Link
-            href={backHref}
-            aria-label={demo ? "Demo zurücksetzen" : "Zurück zum Dashboard"}
-            onClick={
-              demo
-                ? (event) => {
-                    event.preventDefault();
-                    reset();
-                  }
-                : undefined
-            }
-            className="flex items-center gap-3 rounded-xl focus-visible:outline-2 focus-visible:outline-blue-600"
-          >
-            <span className="flex size-10 items-center justify-center rounded-xl bg-blue-600 text-white">
-              <Wrench size={20} />
-            </span>
-            <span>
-              <span className="block text-base font-bold tracking-tight">
-                SmartMaintain<span className="text-blue-600">.</span>
+      {!embedded && (
+        <header className="border-b border-slate-200/80 bg-white px-4 sm:px-8">
+          <div className="mx-auto flex min-h-20 max-w-7xl flex-wrap items-center justify-between gap-3 py-4">
+            <Link
+              href={backHref}
+              aria-label={demo ? "Demo zurücksetzen" : "Zurück zum Dashboard"}
+              onClick={
+                demo
+                  ? (event) => {
+                      event.preventDefault();
+                      reset();
+                    }
+                  : undefined
+              }
+              className="flex items-center gap-3 rounded-xl focus-visible:outline-2 focus-visible:outline-blue-600"
+            >
+              <span className="flex size-10 items-center justify-center rounded-xl bg-blue-600 text-white">
+                <Wrench size={20} />
               </span>
-              <span className="block text-xs text-slate-500">
-                Property operations, simplified.
+              <span>
+                <span className="block text-base font-bold tracking-tight">
+                  SmartMaintain<span className="text-blue-600">.</span>
+                </span>
+                <span className="block text-xs text-slate-500">
+                  Property operations, simplified.
+                </span>
               </span>
+            </Link>
+            <span className="rounded-full border border-slate-200 px-3 py-1.5 text-xs text-slate-500">
+              {roleLabel}
             </span>
-          </Link>
-          <span className="rounded-full border border-slate-200 px-3 py-1.5 text-xs text-slate-500">
-            {roleLabel}
-          </span>
-        </div>
-      </header>
+          </div>
+        </header>
+      )}
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-7 sm:px-8 sm:py-10">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <div>

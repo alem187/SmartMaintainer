@@ -4,10 +4,11 @@
 
 Ein Prototyp für digitale Hausverwaltung: Mieter melden Schäden mit Foto,
 Gemini unterstützt die Einordnung und die Verwaltung verfolgt Tickets in Echtzeit.
-Die neue Analytics-Oberfläche macht Aufkommen, offene Prioritäten und
-Erledigungsstand nachvollziehbar.
+Der neue Demo-Arbeitsplatz macht den Ablauf interaktiv erlebbar: Meldungen
+sichten, Teams zuweisen und nächste Schritte planen. Die gemeinsame
+Auswertung zeigt Aufkommen, offene Prioritäten und Erledigungsstand.
 
-![Analytics: Kennzahlen, Kalenderauswertung und Schadensbereiche](docs/analytics-desktop.png)
+![Demo-Arbeitsplatz mit Ticketboard, Prioritäten und Teamzuweisung](docs/workspace-desktop.png)
 
 **[Demo lokal starten](#in-60-sekunden-ausprobieren)** ·
 **[Architektur & Entscheidungen](docs/analytics-contribution.md)** ·
@@ -29,18 +30,32 @@ npm run dev
 **[localhost:3000/demo](http://localhost:3000/demo)** öffnen.
 Für die Demo sind keine API-Keys, Convex-Konfiguration oder Anmeldung erforderlich.
 
-1. Zwischen **7 Tage**, **30 Tage** und **Gesamt** wechseln.
-2. Nach **Sanitär** oder **Parkblick** suchen: KPIs, Liste und Export folgen der Suche.
-3. **CSV exportieren**: passende Treffer lokal herunterladen.
-4. **Leeren Zustand testen**, anschließend Filter zurücksetzen.
-5. Die Ansicht auf einem Smartphone öffnen; Browser-Zoom bleibt möglich.
+1. Im **Arbeitsplatz** eine Karte öffnen und ein zuständiges Team auswählen.
+2. Einen **nächsten Schritt** speichern, eine **Notiz** ergänzen und den Status ändern.
+3. Am Desktop Karten zwischen den drei Statusspalten ziehen; mobil den Status im Detail ändern.
+4. **Meldung anlegen** ausprobieren und nach Ort oder Team suchen. Filter zeigen dringende oder unzugewiesene offene Fälle.
+5. Zur **Auswertung** wechseln: Die geänderten Tickets fließen direkt in die Kennzahlen ein.
+6. Dort Zeitraum und Suche ausprobieren, CSV exportieren oder den Leerzustand testen.
+7. **Demo zurücksetzen** stellt die ursprünglichen Beispieltickets wieder her.
 
-Die zwölf Meldungen und Orte sind handgeschriebene Fiktion. Ihr Bezugsdatum ist
-absichtlich auf den 21. Oktober 2026 fixiert, damit die Demo reproduzierbar bleibt.
-Sie werden nicht gespeichert, versendet oder in eine Datenbank importiert.
+Die zwölf ursprünglichen Meldungen und Orte sind handgeschriebene Fiktion.
+Ihr Bezugsdatum ist absichtlich auf den 21. Oktober 2026 fixiert, damit die Demo
+reproduzierbar bleibt. Änderungen existieren nur im Arbeitsspeicher dieses
+Browser-Tabs und gehen beim Neuladen verloren. Teamzuweisungen verschicken
+keine Nachrichten; neue Meldungen erzeugen keine echten Tickets. Es gibt keine
+Datenbankverbindung, KI-Anfrage oder Speicherung im Browser.
 
 <details>
-<summary>Mobile Vorschau ansehen</summary>
+<summary>Mobile Arbeitsplatz-Vorschau ansehen</summary>
+
+<img src="docs/workspace-mobile.png" alt="Mobiler Ticketdialog mit Teamzuweisung, nächstem Schritt und Notizen" width="320" />
+
+</details>
+
+<details>
+<summary>Auswertung auf Desktop und Smartphone ansehen</summary>
+
+![Analytics: Kennzahlen, Kalenderauswertung und Schadensbereiche](docs/analytics-desktop.png)
 
 <img src="docs/analytics-mobile.png" alt="Mobile Analytics mit responsiven Filtern und KPI-Kacheln" width="320" />
 
@@ -48,15 +63,21 @@ Sie werden nicht gespeichert, versendet oder in eine Datenbank importiert.
 
 ## Was die Anwendung kann
 
-| Bereich          | Funktionen                                                                           |
-| ---------------- | ------------------------------------------------------------------------------------ |
-| Schadensmeldung  | Mobiles Formular, Fotovorschau und Upload, Erfolgszustand                            |
-| KI-Unterstützung | Kategorie, Dringlichkeit und Zusammenfassung über Gemini; Fallback bei Fehlern       |
-| Ticketverwaltung | Echtzeitliste, Statusfilter und Statuswechsel im Dashboard                           |
-| Auswertung       | Gemeinsame Oberfläche für Admin und Viewer, Zeitraum und Suche, lesbare Details      |
-| Kennzahlen       | Erledigungsrate, offene hohe Prioritäten, tatsächliches 7-Tage-Aufkommen             |
-| Export           | Gefilterte CSV mit UTF-8-BOM, konsistenter Maskierung und Schutz gegen Formelpräfixe |
-| Produktdemo      | Eigenständige `/demo`-Route ohne Backend, mit testbarem Leerzustand                  |
+| Bereich           | Funktionen                                                                            |
+| ----------------- | ------------------------------------------------------------------------------------- |
+| Schadensmeldung   | Mobiles Formular, Fotovorschau und Upload, Erfolgszustand                             |
+| KI-Unterstützung  | Kategorie, Dringlichkeit und Zusammenfassung über Gemini; Fallback bei Fehlern        |
+| Ticketverwaltung  | Echtzeitliste, Statusfilter und Statuswechsel im Dashboard                            |
+| Auswertung        | Gemeinsame Oberfläche für Admin und Viewer, Zeitraum und Suche, lesbare Details       |
+| Kennzahlen        | Erledigungsrate, offene hohe Prioritäten, tatsächliches 7-Tage-Aufkommen              |
+| Export            | Gefilterte CSV mit UTF-8-BOM, konsistenter Maskierung und Schutz gegen Formelpräfixe  |
+| Demo-Arbeitsplatz | Drei Statusspalten, Teamzuweisung, nächste Schritte, Notizen und neue Beispieltickets |
+| Demo-Auswertung   | Gemeinsamer Ticketstand mit dem Arbeitsplatz; Filter, CSV und testbarer Leerzustand   |
+
+Arbeitsplatz-Funktionen wie Teams, nächste Schritte und Notizen sind ausschließlich
+in der isolierten Demo implementiert. Sie sind nicht an das bestehende
+Convex-Backend angebunden. Der CSV-Report exportiert Ticketdaten; Zuweisungen,
+nächste Schritte und Notizen sind darin nicht enthalten.
 
 Die Kennzahlen verwenden **Europe/Berlin** und Kalendertage, auch bei
 Sommerzeitwechseln. „Eingang Ø/Tag“ misst Meldungen, keine Bearbeitungsdauer.
@@ -74,7 +95,10 @@ KI-Prioritäten sind Vorschläge und müssen fachlich geprüft werden.
 | Node-Testläufer / GitHub Actions   | Regressionstests und automatisierte Qualitätsprüfung   |
 
 ```text
-src/app/demo/                 Eigenständiger Einstieg mit Beispieldaten
+src/app/demo/                Eigenständiger Demo-Einstieg mit Beispieldaten
+src/components/DemoWorkspace.tsx
+                             Interaktives Board und gemeinsamer Demo-Zustand
+src/lib/workspace.ts         Reine Funktionen für lokalen Ticket-Workflow
 src/app/admin/               Verwaltung und Analytics
 src/app/viewer/              Lesende Übersicht und Analytics
 src/components/AnalyticsReport.tsx
@@ -83,7 +107,8 @@ src/lib/analytics.ts          Filter, Kalenderauswertung, CSV (ohne React/Backen
 src/lib/demo-tickets.ts       Synthetische, reproduzierbare Fixtures
 src/hooks/useDemoAccess.ts    Bestehende Browser-Rollenprüfung, keine Server-Auth
 convex/                      Bestehende Datenbank-, Storage- und KI-Funktionen
-tests/analytics.test.mjs      Fachliche Regressionstests
+tests/analytics.test.mjs      Analytics-Regressionstests
+tests/workspace.test.mjs      Lokaler Workflow und unveränderliche Updates
 ```
 
 Das Trennen von Datenladen, reinen Berechnungen und Darstellung hält die beiden
@@ -125,18 +150,19 @@ npm run dev
 - `/admin/login`: bestehende Demo-Anmeldung
 - `/admin` und `/admin/analytics`: Verwaltung
 - `/viewer` und `/viewer/analytics`: lesende Oberfläche
-- `/demo`: isolierte Analytics-Demo
+- `/demo`: isolierter Arbeitsplatz mit Board und Auswertung
 
 ## Qualität prüfen
 
 ```bash
-npm test                  # Zeitgrenzen, Sommerzeit, Suche, KPIs und CSV
+npm test                  # Analytics und lokaler Ticket-Workflow
 npm run lint
 npm run typecheck
 npm run build             # ohne Convex- oder Gemini-Secrets möglich
 npm audit --omit=dev
 ```
 
+Die 14 Regressionstests umfassen zehn Analytics- und vier Workflow-Tests.
 GitHub Actions prüft Pull Requests mit Node 24. Ein Produktionsbuild benötigt
 Netzwerkzugriff für die bestehende Google-Font-Integration.
 
@@ -156,7 +182,8 @@ Uploadvalidierung und Missbrauchsschutz sowie serverseitige Aggregation und
 Pagination bei größeren Beständen. Ein Erledigungszeitpunkt würde später
 belastbare Bearbeitungszeit-Kennzahlen ermöglichen.
 
-Der Analytics-Beitrag ergänzt die bestehende Anwendung; die Projektgeschichte
+Der Beitrag ergänzt die bestehende Anwendung um den Demo-Arbeitsplatz, die
+gemeinsame Auswertung und ihre Tests; die Projektgeschichte
 und ursprüngliche Urheberschaft bleiben erhalten. Eine konkrete Formulierung
 für den eigenen Beitrag steht am Ende der technischen Dokumentation.
 
