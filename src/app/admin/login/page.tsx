@@ -15,6 +15,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { login, ROLE_LABELS, ROLE_DESCRIPTIONS, type UserRole } from "@/lib/auth";
 import {
@@ -155,9 +156,9 @@ export default function AdminLogin() {
             <div className="mt-4 text-center">
               <p className="text-white/30 text-xs">
                 Mieter?{" "}
-                <a href="/" className="text-blue-400/70 hover:text-blue-400 underline transition-colors">
+                <Link href="/" className="text-blue-400/70 hover:text-blue-400 underline transition-colors">
                   Schadensmeldung einreichen →
-                </a>
+                </Link>
               </p>
             </div>
           </div>

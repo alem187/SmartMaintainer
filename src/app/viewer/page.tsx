@@ -19,8 +19,7 @@
  */
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@convex/_generated/api";
 import {
@@ -28,9 +27,10 @@ import {
   AlertTriangle, TrendingUp, X,
 } from "lucide-react";
 import Link from "next/link";
+import { useDemoAccess } from "@/hooks/useDemoAccess";
 import { Spinner } from "@/components/ui/Spinner";
 import { TicketCard } from "@/components/TicketCard";
-import { isAuthenticated, getRole, ROLE_LABELS } from "@/lib/auth";
+import { ROLE_LABELS } from "@/lib/auth";
 import type { Ticket, TicketStatus } from "@/lib/types";
 
 /** Filter-Tab-Konfiguration – identisch zum Admin-Dashboard */
@@ -57,19 +57,9 @@ function useTicketStats(tickets: Ticket[]) {
  * Auth-Guard: Nur Benutzer mit Rolle "viewer" dürfen diese Seite sehen.
  */
 export default function ViewerDashboard() {
-  const router = useRouter();
-  const [authChecked, setAuthChecked] = useState(false);
+  const authChecked = useDemoAccess("viewer");
 
-  useEffect(() => {
-    if (!isAuthenticated() || getRole() !== "viewer") {
-      // Nicht eingeloggt oder falsche Rolle → zurück zum Login
-      router.replace("/admin/login");
-    } else {
-      setAuthChecked(true);
-    }
-  }, [router]);
-
-  const tickets = useQuery(api.tickets.list) as Ticket[] | undefined;
+  const tickets = useQuery(api.tickets.list, authChecked ? {} : "skip") as Ticket[] | undefined;
 
   if (!authChecked) return null;
 

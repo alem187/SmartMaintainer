@@ -1,6 +1,6 @@
 "use client";
 
-import { Upload, CheckCircle, Camera, Send, ImagePlus, X } from "lucide-react";
+import { CheckCircle, Camera, Send, ImagePlus, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Spinner } from "@/components/ui/Spinner";
 import { useTicketSubmit } from "@/hooks/useTicketSubmit";
